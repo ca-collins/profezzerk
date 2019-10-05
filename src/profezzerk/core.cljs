@@ -184,8 +184,10 @@
            [sa/TableRow
             [sa/TableHeaderCell]
             [sa/TableHeaderCell]
-            [sa/TableHeaderCell "NAME"]
-            [sa/TableHeaderCell "NOTES"]]]
+            [sa/TableHeaderCell
+             [sa/Header {:class "sub"} "NAME"]]
+            [sa/TableHeaderCell
+             [sa/Header {:class "sub"} "NOTES"]]]]
           [sa/TableBody
            (for [student students]
             [sa/TableRow {:key (:id student)}

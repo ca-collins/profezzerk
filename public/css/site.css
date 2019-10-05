@@ -21,8 +21,8 @@ body {
   font-size: 1.75em;
 }
 
-.ui.table thead th {
-  font-weight: normal;
+.ui.table {
+  margin-top: -1px;
 }
 
 .name-cells {
