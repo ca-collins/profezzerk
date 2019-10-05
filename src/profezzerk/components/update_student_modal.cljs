@@ -12,14 +12,16 @@
                                                   :on-click #(reset! modal-state true)}
                                        [:i {:class "pencil alternate icon"}]])
                :open @modal-state}
-     [sa/ModalHeader "Edit Student"]
+     [sa/ModalHeader "Edit Student: " [:span name]]
      [sa/ModalContent
       [sa/ModalDescription
        [sa/Header "Please complete edits."]
        (let [new-name (r/atom nil)
              new-description (r/atom nil)
              handle-create #(do (reset! modal-state false)
-                                (a/update-student! id @new-name @new-description)
+                                (a/update-student! id
+                                 (if @new-name @new-name name)
+                                 (if @new-description @new-description description))
                                 (fetch-data!))
              get-value #(-> % (.-target) (.-value))]
         [sa/Form
