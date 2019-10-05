@@ -4,7 +4,7 @@
     [soda-ash.core :as sa]
     [profezzerk.actions :as a]))
 
-(defn create-student-modal []
+(defn create-student-modal [fetch-data!]
  (let [modal-state (r/atom false)]
    (fn []
     (js/console.log "create-student-modal rendered")
@@ -20,7 +20,7 @@
              description (r/atom nil)
              handle-create #(do (reset! modal-state false)
                                 (a/create-student! @name @description)
-                                (.reload (.-location js/window)))
+                                (fetch-data!))
              get-value #(-> % (.-target) (.-value))]
         [sa/Form
          [sa/FormField

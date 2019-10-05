@@ -9,9 +9,22 @@
     [profezzerk.components.create-student-modal :refer [create-student-modal]]
     [profezzerk.components.update-student-modal :refer [update-student-modal]]))
 
+(def app-state (r/atom nil))
+(def student-mgmt-server "http://localhost:8000/students")
+
+(defn sanitize-data [response]
+ (js->clj (.parse js/JSON response) :keywordize-keys true))
+
 (defn students-page []
- (let [data-atom (r/atom nil)]
-  (a/fetch-data! data-atom)
+ (let [fetch-data! (fn []
+                     (js/console.log "data fetched!")
+                     (js/setTimeout
+                      (fn [] (GET student-mgmt-server
+                               {:handler #(reset! app-state (sanitize-data %))
+                                :error-handler (fn [{:keys [status status-text]}]
+                                                 (js/console.log status status-text))}))
+                      200))]
+  (fetch-data!)
   (fn []
    (js/console.log "student-page rendered")
    [:div
@@ -21,11 +34,11 @@
       [:div.content
        [:span "Profe"] "zzerk"
        [:div.sub.header {:id "tagline"} "Build your own student list"]]]]
-    (let [students @data-atom]
+    (let [students @app-state]
       [sa/Container {:text-align 'center
                      :class "page-content"}
        [sa/Container {:text-align 'left}
-        [create-student-modal]]
+        [create-student-modal fetch-data!]]
        [sa/Segment {:attached 'top :color "orange"}
         [sa/Header {:size "medium" :class ""} "STUDENT ROSTER"]]
        (if (seq students)
@@ -43,9 +56,9 @@
            (for [student students]
             [sa/TableRow {:key (:id student)}
              [sa/TableCell {:class "collapsing"}
-              [delete-student-modal (:id student) (:name student)]]
+              [delete-student-modal (:id student) (:name student) fetch-data!]]
              [sa/TableCell {:class "collapsing"}
-              [update-student-modal (:id student) (:name student) (:description student)]]
+              [update-student-modal (:id student) (:name student) (:description student) fetch-data!]]
              [sa/TableCell {:class "name-cells"} (:name student)]
              [sa/TableCell (:description student)]])]]
          [:div "No more students!"])])])))
