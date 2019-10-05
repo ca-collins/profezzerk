@@ -6,23 +6,6 @@
 
 (def student-mgmt-server "http://localhost:8000/students")
 
-(defn sanitize-data [response]
- (js->clj (.parse js/JSON response) :keywordize-keys true))
-
-(defn handler2 [[ok response]]
-  (if ok
-    ; (.log js/console
-     (str response)
-    ; (.error js/console
-     (str response)))
-
-(defn fetch-data! [data-atom]
-  (js/console.log "data fetched!")
-  (GET student-mgmt-server
-    {:handler #(reset! data-atom (sanitize-data %))
-     :error-handler (fn [{:keys [status status-text]}]
-                      (js/console.log status status-text))}))
-
 (defn handler2 [[ok response]]
   (if ok
     ; (.log js/console
