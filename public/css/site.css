@@ -1,34 +1,30 @@
-/* body {
+body {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
-  max-width: 600px;
-  margin: 0 auto;
-  padding-top: 72px;
+  color: #2D586C;
+  padding-top: 25px;
   -webkit-font-smoothing: antialiased;
   font-size: 1.125em;
-  color: #333;
   line-height: 1.5em;
+  background-color: #2D586C;
 }
 
-h1, h2, h3 {
-  color: #000;
+.page-content {
+  margin-top: 25px;
+  margin-bottom: 150px;
+  color: white;
 }
-h1 {
-  font-size: 2.5em
-}
-
-h2 {
-  font-size: 2em
+.content > span {
+  font-weight: 100;
 }
 
-h3 {
-  font-size: 1.5em
+#logo-icon {
+  font-size: 1.75em;
 }
 
-a {
-  text-decoration: none;
-  color: #09f;
+.ui.table thead th {
+  font-weight: normal;
 }
 
-a:hover {
-  text-decoration: underline;
-} */
+.name-cells {
+  font-weight: 600
+}

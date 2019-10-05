@@ -68,7 +68,9 @@
                              (delete-student! id)
                              (.reload (.-location js/window)))]
       (js/console.log "delete-student-modal rendered")
-      [sa/Modal {:trigger (r/as-element [sa/Button {:color "red" :on-click #(reset! modal-state true)} "Delete"])
+      [sa/Modal {:trigger (r/as-element [sa/Button {:class "red tiny icon"
+                                                    :on-click #(reset! modal-state true)}
+                                         [:i {:class "trash icon"}]])
                  :open @modal-state}
        [sa/ModalHeader "Are you sure you want to delete this student?"]
        [sa/ModalContent
@@ -84,7 +86,9 @@
  (let [modal-state (r/atom false)]
    (fn []
     (js/console.log "create-student-modal rendered")
-    [sa/Modal {:trigger (r/as-element [sa/Button {:primary true :on-click #(reset! modal-state true)} "Create New Student"])
+    [sa/Modal {:trigger (r/as-element [sa/Button {:color "orange"
+                                                  :on-click #(reset! modal-state true)}
+                                        "Create New Student"])
                :open @modal-state}
      [sa/ModalHeader "Create New Student"]
      [sa/ModalContent
@@ -118,7 +122,9 @@
  (let [modal-state (r/atom false)]
    (fn [id name description]
     (js/console.log "update-student-modal rendered")
-    [sa/Modal {:trigger (r/as-element [sa/Button {:color "gray" :on-click #(reset! modal-state true)} "Edit"])
+    [sa/Modal {:trigger (r/as-element [sa/Button {:class "tiny icon"
+                                                  :on-click #(reset! modal-state true)}
+                                       [:i {:class "pencil alternate icon"}]])
                :open @modal-state}
      [sa/ModalHeader "Edit Student"]
      [sa/ModalContent
@@ -156,29 +162,39 @@
   (fetch-data! data-atom)
   (fn []
    (js/console.log "student-page rendered")
-   (let [students @data-atom]
-     [sa/Container {:text-align 'center}
-      [:h1 "My students"]
-      [sa/Container {:text-align 'left}
-       [create-student-modal]]
-      (if (seq students)
-        [sa/Table {:celled true}
-         [sa/TableHeader
-          [sa/TableRow
-           [sa/TableHeaderCell]
-           [sa/TableHeaderCell]
-           [sa/TableHeaderCell "Name"]
-           [sa/TableHeaderCell "Description"]]]
-         [sa/TableBody
-          (for [student students]
-           [sa/TableRow {:key (:id student)}
-            [sa/TableCell
-             [delete-student-modal (:id student)]]
-            [sa/TableCell
-             [update-student-modal (:id student) (:name student) (:description student)]]
-            [sa/TableCell (:name student)]
-            [sa/TableCell (:description student)]])]]
-        [:div "No more students!"])]))))
+   [:div
+    [sa/Container {:text-align 'left}
+     [sa/Header {:as "h1" :class "inverted"}
+      [:i {:class "address book icon orange" :id "logo-icon"}]
+      [:div.content
+       [:span "Profe"] "zzerk"
+       [:div.sub.header {:id "tagline"} "Build your own student list"]]]]
+    (let [students @data-atom]
+      [sa/Container {:text-align 'center
+                     :class "page-content"}
+       [sa/Container {:text-align 'left}
+        [create-student-modal]]
+       [sa/Segment {:attached 'top :color "orange"}
+        [sa/Header {:size "medium" :class ""} "STUDENT ROSTER"]]
+       (if (seq students)
+         [sa/Table {:class "unstackable"
+                    :color "orange"}
+          [sa/TableHeader
+           [sa/TableRow
+            [sa/TableHeaderCell]
+            [sa/TableHeaderCell]
+            [sa/TableHeaderCell "NAME"]
+            [sa/TableHeaderCell "NOTES"]]]
+          [sa/TableBody
+           (for [student students]
+            [sa/TableRow {:key (:id student)}
+             [sa/TableCell {:class "collapsing"}
+              [delete-student-modal (:id student)]]
+             [sa/TableCell {:class "collapsing"}
+              [update-student-modal (:id student) (:name student) (:description student)]]
+             [sa/TableCell {:class "name-cells"} (:name student)]
+             [sa/TableCell (:description student)]])]]
+         [:div "No more students!"])])])))
 
 ;; Initialize app ==================================
 
