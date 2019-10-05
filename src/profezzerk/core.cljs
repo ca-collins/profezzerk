@@ -61,7 +61,7 @@
 
 ;; COMPONENTS ==============================
 
-(defn delete-student-modal [id]
+(defn delete-student-modal [id name]
  (let [modal-state (r/atom false)]
    (fn []
     (let [handle-create #(do (reset! modal-state false)
@@ -72,8 +72,9 @@
                                                     :on-click #(reset! modal-state true)}
                                          [:i {:class "trash icon"}]])
                  :open @modal-state}
-       [sa/ModalHeader "Are you sure you want to delete this student?"]
+       [sa/ModalHeader "Are you sure you want to delete " [:span name] " from the roster?"]
        [sa/ModalContent
+        [sa/Message {:class "warning"} "This database is NOT immutable, so this cannot be undone!"]
         [sa/ModalDescription
          [sa/Button {:on-click #(reset! modal-state false)}
           "Cancel"]
@@ -189,7 +190,7 @@
            (for [student students]
             [sa/TableRow {:key (:id student)}
              [sa/TableCell {:class "collapsing"}
-              [delete-student-modal (:id student)]]
+              [delete-student-modal (:id student) (:name student)]]
              [sa/TableCell {:class "collapsing"}
               [update-student-modal (:id student) (:name student) (:description student)]]
              [sa/TableCell {:class "name-cells"} (:name student)]

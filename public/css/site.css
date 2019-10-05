@@ -28,3 +28,7 @@ body {
 .name-cells {
   font-weight: 600
 }
+
+.ui.modal>.header span {
+  color: #DB2828;
+}
