@@ -1,63 +1,10 @@
 (ns profezzerk.core
-  (:require-macros [cljs.core.async.macros :refer [go]])
   (:require
     [reagent.core :as r]
     [cljs.core.async :refer [<!]]
     [ajax.core :refer [GET POST DELETE ajax-request url-request-format json-response-format]]
-    [soda-ash.core :as sa]))
-
-;; CALCULATIONS ==============================
-(defn sanitize-data [response]
- (js->clj (.parse js/JSON response) :keywordize-keys true))
-
-;; ACTIONS ====================
-(def student-mgmt-server "http://localhost:8000/students")
-
-(defn fetch-data! [data-atom]
-  (js/console.log "data fetched!")
-  (GET student-mgmt-server
-    {:handler #(reset! data-atom (sanitize-data %))
-     :error-handler (fn [{:keys [status status-text]}]
-                      (js/console.log status status-text))}))
-
-(defn handler2 [[ok response]]
-  (if ok
-    ; (.log js/console
-     (str response)
-    ; (.error js/console
-     (str response)))
-
-(defn create-student! [name description]
-  (ajax-request
-        {:uri student-mgmt-server
-         :method :post
-         :params {:name name
-                  :description description}
-         :handler handler2
-         :format (url-request-format)
-         :response-format (json-response-format {:keywords? true})}))
-
-(defn delete-student! [id]
- (js/console.log "delete-student! ran")
- (ajax-request
-       {:uri (str student-mgmt-server "/" id)
-        :method :post
-        :params {:_method "DELETE"}
-        :handler handler2
-        :format (url-request-format)
-        :response-format (json-response-format {:keywords? true})}))
-
-(defn update-student! [id name description]
- (js/console.log "update-student! ran")
- (ajax-request
-       {:uri (str student-mgmt-server "/" id)
-        :method :post
-        :params {:_method "PUT"
-                 :name name
-                 :description description}
-        :handler handler2
-        :format (url-request-format)
-        :response-format (json-response-format {:keywords? true})}))
+    [soda-ash.core :as sa]
+    [profezzerk.actions :as a]))
 
 ;; COMPONENTS ==============================
 
@@ -65,7 +12,7 @@
  (let [modal-state (r/atom false)]
    (fn []
     (let [handle-create #(do (reset! modal-state false)
-                             (delete-student! id)
+                             (a/delete-student! id)
                              (.reload (.-location js/window)))]
       (js/console.log "delete-student-modal rendered")
       [sa/Modal {:trigger (r/as-element [sa/Button {:class "red tiny icon"
@@ -98,7 +45,7 @@
        (let [name (r/atom nil)
              description (r/atom nil)
              handle-create #(do (reset! modal-state false)
-                                (create-student! @name @description)
+                                (a/create-student! @name @description)
                                 (.reload (.-location js/window)))
              get-value #(-> % (.-target) (.-value))]
         [sa/Form
@@ -134,7 +81,7 @@
        (let [new-name (r/atom nil)
              new-description (r/atom nil)
              handle-create #(do (reset! modal-state false)
-                                (update-student! id @new-name @new-description)
+                                (a/update-student! id @new-name @new-description)
                                 (.reload (.-location js/window)))
              get-value #(-> % (.-target) (.-value))]
         [sa/Form
@@ -157,10 +104,9 @@
                      :type "submit"}
           "Update Student"]])]]])))
 
-
 (defn students-page []
  (let [data-atom (r/atom nil)]
-  (fetch-data! data-atom)
+  (a/fetch-data! data-atom)
   (fn []
    (js/console.log "student-page rendered")
    [:div
