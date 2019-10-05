@@ -24,44 +24,45 @@
                                 :error-handler (fn [{:keys [status status-text]}]
                                                  (js/console.log status status-text))}))
                       200))]
-  (fetch-data!)
-  (fn []
-   (js/console.log "student-page rendered")
-   [:div
-    [sa/Container {:text-align 'left}
-     [sa/Header {:as "h1" :class "inverted"}
-      [:i {:class "address book icon orange" :id "logo-icon"}]
-      [:div.content
-       [:span "Profe"] "zzerk"
-       [:div.sub.header {:id "tagline"} "Build your own student list"]]]]
-    (let [students @app-state]
-      [sa/Container {:text-align 'center
-                     :class "page-content"}
-       [sa/Container {:text-align 'left}
-        [create-student-modal fetch-data!]]
-       [sa/Segment {:attached 'top :color "orange"}
-        [sa/Header {:size "medium" :class ""} "STUDENT ROSTER"]]
-       (if (seq students)
-         [sa/Table {:class "unstackable"
-                    :color "orange"}
-          [sa/TableHeader
-           [sa/TableRow
-            [sa/TableHeaderCell]
-            [sa/TableHeaderCell]
-            [sa/TableHeaderCell
-             [sa/Header {:class "sub"} "NAME"]]
-            [sa/TableHeaderCell
-             [sa/Header {:class "sub"} "NOTES"]]]]
-          [sa/TableBody
-           (for [student students]
-            [sa/TableRow {:key (:id student)}
-             [sa/TableCell {:class "collapsing"}
-              [delete-student-modal (:id student) (:name student) fetch-data!]]
-             [sa/TableCell {:class "collapsing"}
-              [update-student-modal (:id student) (:name student) (:description student) fetch-data!]]
-             [sa/TableCell {:class "name-cells"} (:name student)]
-             [sa/TableCell (:description student)]])]]
-         [:div "No more students!"])])])))
+  (when (not @app-state) (fetch-data!))
+  (when @app-state
+    (fn []
+     (js/console.log "student-page rendered")
+     [:div
+      [sa/Container {:text-align 'left}
+       [sa/Header {:as "h1" :class "inverted"}
+        [:i {:class "address book icon orange" :id "logo-icon"}]
+        [:div.content
+         [:span "Profe"] "zzerk"
+         [:div.sub.header {:id "tagline"} "Build your own student roster"]]]]
+      (let [students @app-state]
+        [sa/Container {:text-align 'center
+                       :class "page-content"}
+         [sa/Container {:text-align 'left}
+          [create-student-modal fetch-data!]]
+         [sa/Segment {:attached 'top :color "orange"}
+          [sa/Header {:size "medium" :class ""} "STUDENT ROSTER"]]
+         (if (seq students)
+           [sa/Table {:class "unstackable"
+                      :color "orange"}
+            [sa/TableHeader
+             [sa/TableRow
+              [sa/TableHeaderCell]
+              [sa/TableHeaderCell]
+              [sa/TableHeaderCell
+               [sa/Header {:class "sub"} "NAME"]]
+              [sa/TableHeaderCell
+               [sa/Header {:class "sub"} "NOTES"]]]]
+            [sa/TableBody
+             (for [student students]
+              [sa/TableRow {:key (:id student)}
+               [sa/TableCell {:class "collapsing"}
+                [delete-student-modal (:id student) (:name student) fetch-data!]]
+               [sa/TableCell {:class "collapsing"}
+                [update-student-modal (:id student) (:name student) (:description student) fetch-data!]]
+               [sa/TableCell {:class "name-cells"} (:name student)]
+               [sa/TableCell (:description student)]])]]
+           [:div "No more students!"])])]))))
 
 ;; Initialize app ==================================
 
