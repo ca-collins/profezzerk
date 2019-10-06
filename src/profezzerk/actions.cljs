@@ -24,7 +24,6 @@
          :response-format (json-response-format {:keywords? true})}))
 
 (defn update-student! [id name description]
- (js/console.log "update-student! ran")
  (ajax-request
        {:uri (str student-mgmt-server "/" id)
         :method :post
@@ -36,7 +35,6 @@
         :response-format (json-response-format {:keywords? true})}))
 
 (defn delete-student! [id]
- (js/console.log "delete-student! ran")
  (ajax-request
        {:uri (str student-mgmt-server "/" id)
         :method :post

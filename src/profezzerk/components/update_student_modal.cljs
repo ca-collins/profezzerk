@@ -9,7 +9,6 @@
        error (r/atom false)
        change-attempted (r/atom false)]
    (fn [id name description]
-    (js/console.log "update-student-modal rendered")
     [sa/Modal {:trigger (r/as-element [sa/Button {:class "tiny icon"
                                                   :on-click #(reset! modal-state true)}
                                        [:i {:class "pencil alternate icon"}]])

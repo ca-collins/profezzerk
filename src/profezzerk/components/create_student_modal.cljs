@@ -8,7 +8,6 @@
  (let [modal-state (r/atom false)
        error (r/atom false)]
    (fn []
-    (js/console.log "create-student-modal rendered")
     [sa/Modal {:trigger (r/as-element [sa/Button {:color "orange"
                                                   :on-click #(reset! modal-state true)}
                                         "Create New Student"])

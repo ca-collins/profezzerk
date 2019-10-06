@@ -10,7 +10,6 @@
     (let [handle-delete #(do (reset! modal-state false)
                              (a/delete-student! id)
                              (fetch-data!))]
-      (js/console.log "delete-student-modal rendered")
       [sa/Modal {:trigger (r/as-element [sa/Button {:class "red tiny icon"
                                                     :on-click #(reset! modal-state true)}
                                          [:i {:class "trash icon"}]])

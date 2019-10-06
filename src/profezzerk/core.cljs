@@ -17,17 +17,14 @@
 
 (defn students-page []
  (let [fetch-data! (fn []
-                     (js/console.log "data fetched!")
                      (js/setTimeout
                       (fn [] (GET student-mgmt-server
                                {:handler #(reset! app-state (sanitize-data %))
-                                :error-handler (fn [{:keys [status status-text]}]
-                                                 (js/console.log status status-text))}))
+                                :error-handler (fn [{:keys [status status-text]}])}))
                       200))]
   (when (not @app-state) (fetch-data!))
   (when @app-state
     (fn []
-     (js/console.log "student-page rendered")
      [:div
       [sa/Container {:text-align 'left}
        [sa/Header {:as "h1" :class "inverted"}
