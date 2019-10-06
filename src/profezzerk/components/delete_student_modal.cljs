@@ -7,7 +7,7 @@
 (defn delete-student-modal [id name fetch-data!]
  (let [modal-state (r/atom false)]
    (fn []
-    (let [handle-create #(do (reset! modal-state false)
+    (let [handle-delete #(do (reset! modal-state false)
                              (a/delete-student! id)
                              (fetch-data!))]
       (js/console.log "delete-student-modal rendered")
@@ -21,7 +21,7 @@
         [sa/ModalDescription
          [sa/Button {:on-click #(reset! modal-state false)}
           "Cancel"]
-         [sa/Button {:on-click handle-create
+         [sa/Button {:on-click handle-delete
                      :color "red"
                      :type "submit"}
           "Delete"]]]]))))
