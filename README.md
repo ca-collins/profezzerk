@@ -1,7 +1,7 @@
 
 # Installation
 
-1. Requires [Leiningen](https://leiningen.org/) & JavaSDK
+1. Requires [Leiningen](https://leiningen.org/) & [JavaSDK](http://openjdk.java.net/)
 
 2. Be sure to follow the [studentmgmt README instructions](https://github.com/ca-collins/studentmgmt) to get the server and database running.
 
