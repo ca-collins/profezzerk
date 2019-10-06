@@ -31,7 +31,7 @@
      [:div
       [sa/Container {:text-align 'left}
        [sa/Header {:as "h1" :class "inverted"}
-        [:i {:class "address book icon orange" :id "logo-icon"}]
+        [:i.address.book.icon.orange {:id "logo-icon"}]
         [:div.content
          [:span "Profe"] "zzerk"
          [:div.sub.header {:id "tagline"} "Build your own student roster"]]]]
