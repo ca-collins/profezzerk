@@ -62,7 +62,9 @@
                 [update-student-modal (:id student) (:name student) (:description student) fetch-data!]]
                [sa/TableCell {:class "name-cells"} (:name student)]
                [sa/TableCell (:description student)]])]]
-           [:div "No more students!"])])]))))
+           [sa/Message {:attached "bottom" :warning true}
+            [sa/MessageHeader "There are no students on this roster."]
+            [:p "Click the 'Create New Student' button to add a student."]])])]))))
 
 ;; Initialize app ==================================
 
