@@ -17,7 +17,7 @@
                  :open @modal-state}
        [sa/ModalHeader "Are you sure you want to delete " [:span name] " from the roster?"]
        [sa/ModalContent
-        [sa/Message {:class "warning"} "This database is NOT immutable, so this cannot be undone!"]
+        [sa/Message {:class "warning"} "This database is NOT immutable, so this cannot be undone! ;)"]
         [sa/ModalDescription
          [sa/Button {:on-click #(reset! modal-state false)}
           "Cancel"]
