@@ -16,12 +16,9 @@
  (js->clj (.parse js/JSON response) :keywordize-keys true))
 
 (defn students-page []
- (let [fetch-data! (fn []
-                     (js/setTimeout
-                      (fn [] (GET student-mgmt-server
-                               {:handler #(reset! app-state (sanitize-data %))
-                                :error-handler (fn [{:keys [status status-text]}])}))
-                      200))]
+ (let [fetch-data! (fn [] (GET student-mgmt-server
+                            {:handler #(reset! app-state (sanitize-data %))
+                             :error-handler (fn [{:keys [status status-text]}])}))]
   (when (not @app-state) (fetch-data!))
   (when @app-state
     (fn []

@@ -6,7 +6,9 @@
 
 (defn create-student-modal [fetch-data!]
  (let [modal-state (r/atom false)
-       error (r/atom false)]
+       error (r/atom false)
+       name (r/atom nil)
+       description (r/atom nil)]
    (fn []
     [sa/Modal {:trigger (r/as-element [sa/Button {:color "orange"
                                                   :on-click #(reset! modal-state true)}
@@ -16,40 +18,33 @@
      [sa/ModalContent
       [sa/ModalDescription
        [sa/Header "Please complete new student form."]
-       (let [name (atom nil)
-             description (atom nil)
-             handle-create #(if (empty? @name)
+       (let [handle-create #(if (empty? @name)
                              (reset! error true)
                              (do (reset! modal-state false)
                                  (reset! error false)
-                                 (a/create-student! @name (if @description @description ""))
-                                 (fetch-data!)))
+                                 (a/create-student! @name (if @description @description "") fetch-data!)))
+                                 ; (reset! name nil)))
              get-value #(-> % (.-target) (.-value))]
-        [sa/Form
+        [sa/Form {:on-submit (fn [e] (.preventDefault e)
+                                     (handle-create))}
          [sa/FormField {:required true}
           [:label "First & Last Name"]
           [sa/FormInput {:id "name-input"
                          :type "text"
                          :placeholder "First & Last Name"
-                         :on-key-press #(when (= 13 (.-charCode %))
-                                          (handle-create)
-                                          (.preventDefault %))
                          :on-change #(reset! name (get-value %))}]]
          [sa/FormField
           [:label "Notes"]
           [:input {:id "description-input"
                    :placeholder "Notes"
-                   :on-change #(reset! description (get-value %))
-                   :on-key-press #(when (= 13 (.-charCode %))
-                                    (handle-create)
-                                    (.preventDefault %))}]]
+                   :on-change #(reset! description (get-value %))}]]
          (when @error
            [sa/Message {:negative true}
             [sa/MessageHeader "Student name cannot be blank!"]])
-         [sa/Button {:on-click #(do (reset! modal-state false)
+         [sa/Button {:type "button"
+                     :on-click #(do (reset! modal-state false)
                                     (reset! error false))}
           "Cancel"]
-         [sa/Button {:on-click handle-create
-                     :primary true
+         [sa/Button {:primary true
                      :type "submit"}
           "Create"]])]]])))
